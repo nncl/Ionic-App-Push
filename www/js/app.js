@@ -23,15 +23,27 @@ app.run(function($ionicPlatform) {
   });
 });
 
-app.controller('HomeCtrl', function( $scope, $ionicPlatform, $cordovaPush, $rootScope ){
+app.controller('HomeCtrl', function( $scope, $ionicPlatform, $cordovaPush, $rootScope, $cordovaDialogs ){
 
   $scope.obj = {};
+
+  // var pushNotification = window.plugins.pushNotification;
 
   var androidConfig = {
     "senderID": "635953020264",
   };
 
   document.addEventListener("deviceready", function () {
+
+    // pushNotification = window.plugins.pushNotification;
+    // pushNotification.register(onNotification,errorHandler, {
+    //     'badge': 'true',
+    //     'sound': 'true',
+    //     'alert': 'true',
+    //     'ecb': 'onNotification',
+    //     'senderID': 'YOUR GOOGLE CONSOLE PROJECT NUMBER',
+    //   }
+    // );
 
     $cordovaPush.register(androidConfig).then(function(result) {
       // Success
@@ -52,8 +64,7 @@ app.controller('HomeCtrl', function( $scope, $ionicPlatform, $cordovaPush, $root
           // this is the actual push notification. its format depends on the data model from the push server
           var title = notification.payload['gcm.notification.title'];
           var text = notification.payload['gcm.notification.text'];
-          alert('Title: ' + title + ' Message: ' + text);
-          $scope.obj = notification.payload;
+          $cordovaDialogs.alert(text, title);
           break;
 
         case 'error':
